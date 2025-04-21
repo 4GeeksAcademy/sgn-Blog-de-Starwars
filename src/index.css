@@ -1,0 +1,17 @@
+body {
+    padding-top: 2rem;
+}
+
+@media (min-width: 576px) {
+    .card-group.card-group-scroll {
+        display: flex; 
+        overflow-y: auto;
+        flex-wrap: nowrap;
+        
+    }
+}
+
+.card-group.card-group-scroll > .card {
+    flex-basis: 100%; 
+    margin-bottom: 1rem; 
+}
