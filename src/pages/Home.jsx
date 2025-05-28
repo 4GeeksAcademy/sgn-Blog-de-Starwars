@@ -14,9 +14,9 @@ export const Home = () => {
         const planetsData = await fetchPlanets();
         const vehiclesData = await fetchVehicles();
 
-        setPeople(peopleData);
-        setPlanets(planetsData);
-        setVehicles(vehiclesData);
+        setPeople(peopleData.slice(0, 10));
+        setPlanets(planetsData.slice(0, 10));
+        setVehicles(vehiclesData.slice(0, 10));
       } catch (error) {
         console.error("Error al obtener los datos:", error);
       }
@@ -26,19 +26,22 @@ export const Home = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Personajes</h2>
-      <div className="cards-container">
-        {people.map((person, index) => (
-          <Card
-            key={`person-${index}`}
-            title={person.name}
-            description={`Género: ${person.gender} | Altura: ${person.height}`}
-            imgSrc="img/peoples.jpg"
-            altText={person.name}
-          />
-        ))}
-      </div>
+
+    <div className="container-fluid py-2 " >
+ 
+        <h2>Personajes</h2>
+        <div className="cards-container">
+          {people.map((person, index) => (
+            <Card
+              key={`person-${index}`}
+              title={person.name}
+              description={`Género: ${person.gender} | Altura: ${person.height}`}
+              imgSrc="img/peoples.jpg"
+              altText={person.name}
+            />
+          ))}
+        </div>
+      
 
 
 

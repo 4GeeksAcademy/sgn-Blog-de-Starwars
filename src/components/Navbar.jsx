@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 export const Navbar = () => {
 
 	return (
-		<nav className="navbar navbar-light bg-light">
+		<nav className="navbar">
 			<div className="container">
 				<Link to="/">
-				<img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Star_Wars_Logo.svg" alt="LOGO_STAR_WARS"   className="img-fluid"
+				<img src="https://1000marcas.net/wp-content/uploads/2019/12/Star-Wars-emblema.jpg" alt="LOGO_STAR_WARS"   className="img-fluid"
   				style={{ width: "100px", height: "auto" }}  />
 				</Link>
 				<div className="dropdown">
