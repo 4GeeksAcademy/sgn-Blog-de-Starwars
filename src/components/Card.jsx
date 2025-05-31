@@ -1,6 +1,6 @@
 import{ Link } from "react-router-dom";
 import React from "react";
-const Card = ({ title, description, id, type, altText }) => {
+const Card = ({ title, description, id, type, altText, onFavorite  }) => {
     return (
         <div className="container my-4">
             <div className="d-flex overflow-auto gap-3 pb-2">
@@ -13,7 +13,7 @@ const Card = ({ title, description, id, type, altText }) => {
                             <Link to ={`/${type}/${id}`} className="btn ms-2" style={{ backgroundColor: "#3a8ea5", color: "white" }}>
                                 Detalles
                             </Link>
-                            <button type="button" className="btn btn-outline-danger border-0 "><i className="fa-regular fa-heart"></i></button>
+                            <button type="button" onClick={onFavorite} className="btn btn-outline-danger border-0  "><i className="fa-regular fa-heart"></i></button>
                         </div>
                     </div>
                 </div>

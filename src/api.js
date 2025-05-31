@@ -47,7 +47,6 @@ export const fetchAllData = async (baseUrl, limit = 10) => {
     url = data.next;
   }
 
-  // Obtener detalles completos de cada recurso
   const detailedResults = await Promise.all(
     results.map(async (item) => {
       const detailRes = await fetch(item.url);
@@ -60,7 +59,7 @@ export const fetchAllData = async (baseUrl, limit = 10) => {
   return detailedResults;
 };
 
-// Funciones para obtener listas de recursos con detalles completos
 export const fetchPeople = (limit = 10) => fetchAllData(`${BASE_URL}/people`, limit);
 export const fetchPlanets = (limit = 10) => fetchAllData(`${BASE_URL}/planets`, limit);
 export const fetchVehicles = (limit = 10) => fetchAllData(`${BASE_URL}/vehicles`, limit);
+

@@ -45,6 +45,28 @@ const Home = () => {
 
     fetchData();
   }, []);
+
+const [favorites, setFavorites] = useState(() => {
+
+  const favs = localStorage.getItem("favorites");
+  return favs ? JSON.parse(favs) : [];
+});
+
+const addFavorite = (item, type) => {
+  const newItem = {
+    uid: item.uid,
+    name: item.properties?.name || item.name,
+    type: type
+  };
+
+  if (!favorites.some(fav => fav.uid === newItem.uid && fav.type === newItem.type)) {
+    const newFavorites = [...favorites, newItem];
+    setFavorites(newFavorites);
+    localStorage.setItem("favorites", JSON.stringify(newFavorites));
+    window.dispatchEvent(new Event("favoritesUpdated")); // ← Esto notifica a otros componentes
+  }
+};
+
   const renderSection = (title, items, image, renderDescription, type) => (
     <>
      
@@ -60,6 +82,7 @@ const Home = () => {
             altText={item.properties?.name}
             id={item.uid}
             type={type} 
+            onFavorite={() => addFavorite(item, type)}
           />
         ))}
       </div>
