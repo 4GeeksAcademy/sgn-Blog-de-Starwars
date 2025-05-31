@@ -1,6 +1,6 @@
 body {
     padding-top: 2rem;
-    background-color: black;
+    background-color: #0f1115;
 
 }
 h2 {
@@ -11,17 +11,8 @@ h2 {
   margin-bottom: 15px;
 }
 
-@media (min-width: 576px) {
-    .card-group.card-group-scroll {
-        display: flex; 
-        overflow-y: auto;
-        flex-wrap: nowrap;
-        
-    }
-}
-.container-fluid {
-    padding: 0 1rem;
-}
+
+
 .card {
     background-color: #1a1a1a;
     border: none;
@@ -31,10 +22,19 @@ h2 {
 }
 
 
-.cards-container {
-  display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  gap: 1rem;
-  padding-bottom: 1rem;
+.sable-laser {
+  height: 8px;
+  border: none;
+  background: linear-gradient(to right, red, orange, yellow);
+  box-shadow:
+    0 0 15px red,
+    0 0 30px orange,
+    0 0 45px yellow,
+    0 0 60px yellow; /* Más intensidad */
+  margin: 2rem 0;
+  position: relative;
+  z-index: 1;
+}
+.fs-4{
+    color: #ffda00;
 }

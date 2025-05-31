@@ -2,75 +2,114 @@ import { useEffect, useState } from "react";
 import { fetchPeople, fetchPlanets, fetchVehicles } from "../api.js";
 import Card from "../components/Card.jsx";
 
-export const Home = () => {
+const Home = () => {
   const [people, setPeople] = useState([]);
   const [planets, setPlanets] = useState([]);
   const [vehicles, setVehicles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const peopleData = await fetchPeople();
-        const planetsData = await fetchPlanets();
-        const vehiclesData = await fetchVehicles();
+  
+        const peopleLS = localStorage.getItem("people");
+        const planetsLS = localStorage.getItem("planets");
+        const vehiclesLS = localStorage.getItem("vehicles");
 
-        setPeople(peopleData.slice(0, 10));
-        setPlanets(planetsData.slice(0, 10));
-        setVehicles(vehiclesData.slice(0, 10));
-      } catch (error) {
-        console.error("Error al obtener los datos:", error);
+        if (peopleLS && planetsLS && vehiclesLS) {
+          setPeople(JSON.parse(peopleLS));
+          setPlanets(JSON.parse(planetsLS));
+          setVehicles(JSON.parse(vehiclesLS));
+        } else {
+     
+          const [peopleData, planetsData, vehiclesData] = await Promise.all([
+            fetchPeople(),
+            fetchPlanets(),
+            fetchVehicles()
+          ]);
+          setPeople(peopleData);
+          setPlanets(planetsData);
+          setVehicles(vehiclesData);
+          localStorage.setItem("people", JSON.stringify(peopleData));
+          localStorage.setItem("planets", JSON.stringify(planetsData));
+          localStorage.setItem("vehicles", JSON.stringify(vehiclesData));
+        }
+      } catch (err) {
+        console.error("Error al obtener los datos:", err);
+        setError("Hubo un error al cargar los datos.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
+  const renderSection = (title, items, image, renderDescription, type) => (
+    <>
+     
+      <div className="mb-5">
+         <h2 className="ms-3 mb-3">{title}</h2>
+      <div className="d-flex flex-row flex-nowrap overflow-auto gap-3 px-3 py-2"  style={{ scrollSnapType: "x mandatory" }}>
+        {items.map((item) => (
+          <Card
+            key={item.uid || item.properties?.name}
+            title={item.properties?.name}
+            description={renderDescription(item)}
+            imgSrc={image}
+            altText={item.properties?.name}
+            id={item.uid}
+            type={type} 
+          />
+        ))}
+      </div>
+      </div>
+    </>
+  );
+
+  if (loading) {
+    return <div className="text-center mt-5">Cargando datos...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center mt-5 text-danger">{error}</div>;
+  }
 
   return (
-
-    <div className="container-fluid py-2 " >
- 
-        <h2>Personajes</h2>
-        <div className="cards-container">
-          {people.map((person, index) => (
-            <Card
-              key={`person-${index}`}
-              title={person.name}
-              description={`Género: ${person.gender} | Altura: ${person.height}`}
-              imgSrc="img/peoples.jpg"
-              altText={person.name}
-            />
-          ))}
-        </div>
+    <div className="container-fluid py-4">
       
 
+        {renderSection("Personajes", people, "img/peoples.jpg", (person) => `
+      
+      Gender: ${person.properties?.gender || "?"}
+      Hair color: ${person.properties?.hair_color || "?"}
+      Eye color: ${person.properties?.eye_color || "?"}
+    `,
+          "people")}
+     
 
-
-      <h2>Planetas</h2>
-      <div className="cards-container">
-        {planets.map((planet, index) => (
-          <Card
-            key={`planet-${index}`}
-            title={planet.name}
-            description={`Clima: ${planet.climate} | Terreno: ${planet.terrain}`}
-            imgSrc="img/planets.jpg"
-            altText={planet.name}
-          />
-        ))}
-      </div>
-
-      <h2>Vehículos</h2>
-      <div className="cards-container">
-        {vehicles.map((vehicle, index) => (
-          <Card
-            key={`vehicle-${index}`}
-            title={vehicle.name}
-            description={`Modelo: ${vehicle.model} | Fabricante: ${vehicle.manufacturer}`}
-            imgSrc="img/vehicles.jpg"
-            altText={vehicle.name}
-          />
-        ))}
-      </div>
+      
+        {renderSection("Planetas", planets, "img/planets.jpg", (planet) => `
+     
+      Climate: ${planet.properties?.climate || "?"}
+      Terrain: ${planet.properties?.terrain || "?"}
+    `,
+          "planets")}
+     
+    
+        {renderSection("Vehículos", vehicles, "img/vehicles.jpg", (vehicle) => `
+    
+      Model: ${vehicle.properties?.model || "?"}
+      Manufacturer: ${vehicle.properties?.manufacturer || "?"}
+    `,
+          "vehicles")}
+    
     </div>
   );
+
+
+
+
 };
+
 export default Home;
